@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/router/app_router.dart';
+import 'package:go_router/go_router.dart';
+import '../../core/router/route_names.dart';
 import '../../viewmodels/address_provider.dart';
 
-@RoutePage()
 class AddressListScreen extends ConsumerWidget {
   const AddressListScreen({super.key});
 
@@ -34,8 +33,9 @@ class AddressListScreen extends ConsumerWidget {
                       },
                     ),
                     onTap: () {
-                      context.router.push(
-                        AddUpdateAddressRoute(address: address),
+                      context.push(
+                        RouteNames.addUpdateAddressRoute,
+                        extra: address,
                       );
                     },
                   ),
@@ -44,7 +44,7 @@ class AddressListScreen extends ConsumerWidget {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.router.push(AddUpdateAddressRoute());
+          context.push(RouteNames.addUpdateAddressRoute);
         },
         child: const Icon(Icons.add),
       ),

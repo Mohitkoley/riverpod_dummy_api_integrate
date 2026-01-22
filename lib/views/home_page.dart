@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_api_integrate/core/router/app_router.dart';
+import 'package:go_router/go_router.dart';
 import 'package:riverpod_api_integrate/viewmodels/post_provider.dart';
 import 'package:riverpod_api_integrate/views/widgets/post_card.dart';
+import 'package:riverpod_api_integrate/core/router/route_names.dart';
 
-import 'package:auto_route/auto_route.dart';
-
-@RoutePage()
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -22,7 +20,7 @@ class HomeScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.location_on),
             onPressed: () {
-              context.router.push(const AddressListRoute());
+              context.push(RouteNames.addressList);
             },
           ),
         ],

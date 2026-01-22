@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
 import '../../data/models/address_model.dart';
 import '../../viewmodels/address_provider.dart';
 import '../../core/mixins/validation_mixin.dart';
 
-@RoutePage()
 class AddUpdateAddressScreen extends ConsumerStatefulWidget {
   final AddressModel? address;
   const AddUpdateAddressScreen({super.key, this.address});
@@ -67,7 +66,7 @@ class _AddUpdateAddressScreenState extends ConsumerState<AddUpdateAddressScreen>
       } else {
         ref.read(addressProvider.notifier).updateAddress(address);
       }
-      context.router.pop();
+      context.pop();
     }
   }
 
