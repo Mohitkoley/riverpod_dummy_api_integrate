@@ -1,29 +1,34 @@
 import '../data/models/address_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../core/database/database_helper.dart';
 
 class AddressRepository {
-  final List<AddressModel> _addresses = [];
+  final DatabaseHelper _databaseHelper;
 
-  List<AddressModel> getAddresses() {
-    return List.from(_addresses);
+  AddressRepository(this._databaseHelper);
+
+  Future<List<AddressModel>> getAddresses() async {
+    return await _databaseHelper.getAddressList();
   }
 
-  void addAddress(AddressModel address) {
-    _addresses.add(address);
+  Future<void> addAddress(AddressModel address) async {
+    await _databaseHelper.insertAddress(address);
   }
 
-  void updateAddress(AddressModel address) {
-    final index = _addresses.indexWhere((element) => element.id == address.id);
-    if (index != -1) {
-      _addresses[index] = address;
-    }
+  Future<void> updateAddress(AddressModel address) async {
+    await _databaseHelper.updateAddress(address);
   }
 
-  void deleteAddress(String id) {
-    _addresses.removeWhere((element) => element.id == id);
+  Future<void> deleteAddress(String id) async {
+    await _databaseHelper.deleteAddress(id);
+  }
+
+  Future<AddressModel?> getAddressById(String id) async {
+    return await _databaseHelper.getAddressById(id);
   }
 }
 
 final addressRepositoryProvider = Provider<AddressRepository>((ref) {
-  return AddressRepository();
+  final databaseHelper = DatabaseHelper();
+  return AddressRepository(databaseHelper);
 });

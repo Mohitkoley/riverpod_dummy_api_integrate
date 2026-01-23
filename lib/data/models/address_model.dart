@@ -32,4 +32,55 @@ class AddressModel {
       phoneNumber: phoneNumber ?? this.phoneNumber,
     );
   }
+
+  // Convert AddressModel to Map for database operations
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'street': street,
+      'city': city,
+      'zipCode': zipCode,
+      'phoneNumber': phoneNumber,
+    };
+  }
+
+  // Create AddressModel from Map (database row)
+  factory AddressModel.fromMap(Map<String, dynamic> map) {
+    return AddressModel(
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      street: map['street'] ?? '',
+      city: map['city'] ?? '',
+      zipCode: map['zipCode'] ?? '',
+      phoneNumber: map['phoneNumber'] ?? '',
+    );
+  }
+
+  @override
+  String toString() {
+    return 'AddressModel(id: $id, name: $name, street: $street, city: $city, zipCode: $zipCode, phoneNumber: $phoneNumber)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is AddressModel &&
+        other.id == id &&
+        other.name == name &&
+        other.street == street &&
+        other.city == city &&
+        other.zipCode == zipCode &&
+        other.phoneNumber == phoneNumber;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        name.hashCode ^
+        street.hashCode ^
+        city.hashCode ^
+        zipCode.hashCode ^
+        phoneNumber.hashCode;
+  }
 }

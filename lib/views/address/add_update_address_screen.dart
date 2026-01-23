@@ -50,7 +50,7 @@ class _AddUpdateAddressScreenState extends ConsumerState<AddUpdateAddressScreen>
     super.dispose();
   }
 
-  void _saveAddress() {
+  Future<void> _saveAddress() async {
     if (_formKey.currentState!.validate()) {
       final address = AddressModel(
         id: widget.address?.id ?? const Uuid().v4(),
@@ -62,9 +62,9 @@ class _AddUpdateAddressScreenState extends ConsumerState<AddUpdateAddressScreen>
       );
 
       if (widget.address == null) {
-        ref.read(addressProvider.notifier).addAddress(address);
+        await ref.read(addressProvider.notifier).addAddress(address);
       } else {
-        ref.read(addressProvider.notifier).updateAddress(address);
+        await ref.read(addressProvider.notifier).updateAddress(address);
       }
       context.pop();
     }

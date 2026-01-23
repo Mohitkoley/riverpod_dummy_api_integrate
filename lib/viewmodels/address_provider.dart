@@ -9,23 +9,43 @@ class AddressNotifier extends StateNotifier<List<AddressModel>> {
     _loadAddresses();
   }
 
-  void _loadAddresses() {
-    state = _repository.getAddresses();
+  Future<void> _loadAddresses() async {
+    try {
+      state = await _repository.getAddresses();
+    } catch (e) {
+      // Handle error if needed
+      print('Error loading addresses: $e');
+    }
   }
 
-  void addAddress(AddressModel address) {
-    _repository.addAddress(address);
-    _loadAddresses();
+  Future<void> addAddress(AddressModel address) async {
+    try {
+      await _repository.addAddress(address);
+      await _loadAddresses();
+    } catch (e) {
+      // Handle error if needed
+      print('Error adding address: $e');
+    }
   }
 
-  void updateAddress(AddressModel address) {
-    _repository.updateAddress(address);
-    _loadAddresses();
+  Future<void> updateAddress(AddressModel address) async {
+    try {
+      await _repository.updateAddress(address);
+      await _loadAddresses();
+    } catch (e) {
+      // Handle error if needed
+      print('Error updating address: $e');
+    }
   }
 
-  void deleteAddress(String id) {
-    _repository.deleteAddress(id);
-    _loadAddresses();
+  Future<void> deleteAddress(String id) async {
+    try {
+      await _repository.deleteAddress(id);
+      await _loadAddresses();
+    } catch (e) {
+      // Handle error if needed
+      print('Error deleting address: $e');
+    }
   }
 }
 
