@@ -11,20 +11,18 @@ class AddressNotifier extends StateNotifier<List<AddressModel>> {
 
   Future<void> _loadAddresses() async {
     try {
-      state = await _repository.getAddresses();
+      state = await _repository.getAllAddresses();
     } catch (e) {
-      // Handle error if needed
-      print('Error loading addresses: $e');
+      // In a real app, you might want to expose this error to the UI
     }
   }
 
   Future<void> addAddress(AddressModel address) async {
     try {
-      await _repository.addAddress(address);
+      await _repository.insertAddress(address);
       await _loadAddresses();
     } catch (e) {
       // Handle error if needed
-      print('Error adding address: $e');
     }
   }
 
@@ -34,7 +32,6 @@ class AddressNotifier extends StateNotifier<List<AddressModel>> {
       await _loadAddresses();
     } catch (e) {
       // Handle error if needed
-      print('Error updating address: $e');
     }
   }
 
@@ -44,13 +41,12 @@ class AddressNotifier extends StateNotifier<List<AddressModel>> {
       await _loadAddresses();
     } catch (e) {
       // Handle error if needed
-      print('Error deleting address: $e');
     }
   }
 }
 
 final addressProvider =
     StateNotifierProvider<AddressNotifier, List<AddressModel>>((ref) {
-      final repository = ref.read(addressRepositoryProvider);
+      final repository = ref.watch(addressRepositoryProvider);
       return AddressNotifier(repository);
     });

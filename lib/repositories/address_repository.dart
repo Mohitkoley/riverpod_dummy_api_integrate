@@ -1,34 +1,80 @@
-import '../data/models/address_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../core/database/database_helper.dart';
+import '../core/database/app_database.dart';
+import '../data/models/address_model.dart';
 
 class AddressRepository {
-  final DatabaseHelper _databaseHelper;
+  final AppDatabase _db;
 
-  AddressRepository(this._databaseHelper);
+  AddressRepository(this._db);
 
-  Future<List<AddressModel>> getAddresses() async {
-    return await _databaseHelper.getAddressList();
-  }
-
-  Future<void> addAddress(AddressModel address) async {
-    await _databaseHelper.insertAddress(address);
-  }
-
-  Future<void> updateAddress(AddressModel address) async {
-    await _databaseHelper.updateAddress(address);
-  }
-
-  Future<void> deleteAddress(String id) async {
-    await _databaseHelper.deleteAddress(id);
+  Future<List<AddressModel>> getAllAddresses() async {
+    final data = await _db.getAllAddresses();
+    return data
+        .map(
+          (e) => AddressModel(
+            id: e.id,
+            name: e.name,
+            street: e.street,
+            city: e.city,
+            zipCode: e.zipCode,
+            phoneNumber: e.phoneNumber,
+          ),
+        )
+        .toList();
   }
 
   Future<AddressModel?> getAddressById(String id) async {
-    return await _databaseHelper.getAddressById(id);
+    final data = await _db.getAllAddresses();
+    final match = data.where((e) => e.id == id).firstOrNull;
+    if (match == null) return null;
+    return AddressModel(
+      id: match.id,
+      name: match.name,
+      street: match.street,
+      city: match.city,
+      zipCode: match.zipCode,
+      phoneNumber: match.phoneNumber,
+    );
+  }
+
+  Future<void> insertAddress(AddressModel address) async {
+    await _db.insertAddress(
+      AddressTableCompanion.insert(
+        id: address.id,
+        name: address.name,
+        street: address.street,
+        city: address.city,
+        zipCode: address.zipCode,
+        phoneNumber: address.phoneNumber,
+      ),
+    );
+  }
+
+  Future<void> updateAddress(AddressModel address) async {
+    await _db.updateAddress(
+      AddressTableData(
+        id: address.id,
+        name: address.name,
+        street: address.street,
+        city: address.city,
+        zipCode: address.zipCode,
+        phoneNumber: address.phoneNumber,
+      ),
+    );
+  }
+
+  Future<void> deleteAddress(String id) async {
+    await _db.deleteAddress(id);
   }
 }
 
+final appDatabaseProvider = Provider<AppDatabase>((ref) {
+  final db = AppDatabase();
+  ref.onDispose(() => db.close());
+  return db;
+});
+
 final addressRepositoryProvider = Provider<AddressRepository>((ref) {
-  final databaseHelper = DatabaseHelper();
-  return AddressRepository(databaseHelper);
+  final db = ref.watch(appDatabaseProvider);
+  return AddressRepository(db);
 });
