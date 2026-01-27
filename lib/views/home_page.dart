@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:riverpod_api_integrate/viewmodels/post_provider.dart';
 import 'package:riverpod_api_integrate/views/widgets/post_card.dart';
+import 'package:riverpod_api_integrate/core/router/route_names.dart';
+import 'package:riverpod_api_integrate/viewmodels/auth_viewmodel.dart';
 
-class HomePage extends ConsumerWidget {
-  const HomePage({super.key});
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -12,7 +15,23 @@ class HomePage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: AppBar(title: const Text('Posts')),
+      appBar: AppBar(
+        title: const Text('Posts'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.location_on),
+            onPressed: () {
+              context.push(RouteNames.addressList);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              ref.read(authViewModelProvider.notifier).logout();
+            },
+          ),
+        ],
+      ),
       body: postsAsyncValue.when(
         data: (posts) {
           if (posts.isEmpty) {
