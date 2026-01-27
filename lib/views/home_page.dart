@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_api_integrate/viewmodels/post_provider.dart';
 import 'package:riverpod_api_integrate/views/widgets/post_card.dart';
 import 'package:riverpod_api_integrate/core/router/route_names.dart';
+import 'package:riverpod_api_integrate/viewmodels/auth_viewmodel.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -21,6 +22,12 @@ class HomeScreen extends ConsumerWidget {
             icon: const Icon(Icons.location_on),
             onPressed: () {
               context.push(RouteNames.addressList);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              ref.read(authViewModelProvider.notifier).logout();
             },
           ),
         ],

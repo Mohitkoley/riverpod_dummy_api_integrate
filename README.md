@@ -4,6 +4,7 @@ A comprehensive Flutter application demonstrating best practices for API integra
 
 ## Features
 
+- **Mock Authentication**: Mock login functionality with persistence using `shared_preferences`.
 - **State Management**: Utilizes `flutter_riverpod` for efficient and reactive state management.
 - **Networking**: Implements `dio` for handling HTTP requests with proper timeouts and interceptors.
 - **Local Database**: SQLite integration with `sqflite` for persistent local storage.
@@ -11,6 +12,7 @@ A comprehensive Flutter application demonstrating best practices for API integra
 - **Architecture**: Follows a clean MVVM-style architecture separating logic into Views, ViewModels, Repositories, and Models.
 - **Error Handling**: Robust error handling for network issues and database operations.
 - **UI UX**:
+  - Splash screen for auth initialization
   - Loading states
   - Error states with retry mechanism
   - Pull-to-refresh functionality
@@ -44,6 +46,7 @@ lib/
 - [sqflite](https://pub.dev/packages/sqflite) - SQLite database
 - [path_provider](https://pub.dev/packages/path_provider) - File system paths
 - [go_router](https://pub.dev/packages/go_router) - Navigation routing
+- [shared_preferences](https://pub.dev/packages/shared_preferences) - Local key-value persistence
 
 ### UI & Utilities
 - [google_fonts](https://pub.dev/packages/google_fonts) - Custom fonts
@@ -97,6 +100,14 @@ CREATE TABLE addresses (
 ```
 
 ## Key Features
+
+### Mock Login
+- **Splash Screen**: Checks authentication status on startup.
+- **Mock Credentials**: 
+  - **Email**: `abc@gmail.com`
+  - **Password**: `12345`
+- **Persistence**: Remembers login status using `shared_preferences`.
+- **Automatic Redirection**: Protects routes based on authentication state.
 
 ### Address Management
 - **List View**: Display all saved addresses with sorting by name
