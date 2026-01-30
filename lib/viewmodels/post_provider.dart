@@ -3,13 +3,16 @@ import 'package:riverpod_api_integrate/data/models/post_model.dart';
 import 'package:riverpod_api_integrate/repositories/post_repository.dart';
 import 'package:riverpod_api_integrate/core/network/dio_client.dart';
 
+import 'package:riverpod_api_integrate/core/providers/database_provider.dart';
+
 final dioClientProvider = Provider<DioClient>((ref) {
   return DioClient();
 });
 
 final postRepositoryProvider = Provider<PostRepository>((ref) {
   final dioClient = ref.watch(dioClientProvider);
-  return PostRepositoryImpl(dioClient);
+  final db = ref.watch(appDatabaseProvider);
+  return PostRepositoryImpl(dioClient, db);
 });
 
 final postProvider = AsyncNotifierProvider<PostNotifier, List<Post>>(() {

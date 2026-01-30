@@ -15,12 +15,22 @@ class AddressTable extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@DriftDatabase(tables: [AddressTable])
+class PostsTable extends Table {
+  IntColumn get id => integer()();
+  IntColumn get userId => integer()();
+  TextColumn get title => text()();
+  TextColumn get body => text()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DriftDatabase(tables: [AddressTable, PostsTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   static QueryExecutor _openConnection() {
     return driftDatabase(name: 'my_database');
@@ -35,4 +45,15 @@ class AppDatabase extends _$AppDatabase {
       update(addressTable).replace(address);
   Future<int> deleteAddress(String id) =>
       (delete(addressTable)..where((t) => t.id.equals(id))).go();
+
+  // Post operations
+  Future<List<PostsTableData>> getAllPosts() => select(postsTable).get();
+
+  Future<void> insertPosts(List<Insertable<PostsTableData>> posts) async {
+    await batch((batch) {
+      batch.insertAll(postsTable, posts, mode: InsertMode.insertOrReplace);
+    });
+  }
+
+  Future<int> clearPosts() => delete(postsTable).go();
 }
